@@ -1,6 +1,7 @@
 package com.example.administrator.ninepatchtest.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -23,21 +24,37 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder>{
         mMsgList = msgList;
     }
 
+    /*创建ViewHolder，填充生成View*/
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.msg_item, parent, false);
+        return new ViewHolder(view);
     }
 
+    /*对创建好的ViewHolder绑定事件处理*/
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        Msg msg = mMsgList.get(position);
+        /*设置数据*/
+        if(msg.getType() == Msg.TYPE_RECEIVED){
+            holder.leftLayout.setVisibility(View.VISIBLE);
+            holder.rightLayout.setVisibility(View.GONE);
+            holder.leftMsg.setText(msg.getContent());
+        }else if(msg.getType() == Msg.TYPE_SENT){
+            holder.leftLayout.setVisibility(View.GONE);
+            holder.rightLayout.setVisibility(View.VISIBLE);
+            holder.rightMsg.setText(msg.getContent());
+        }
 
     }
 
+    /*总的消息数量，也就是view item数目*/
     @Override
     public int getItemCount() {
-        return 0;
+        return mMsgList.size();
     }
 
+    /*内部类ViewHolder进行继承，就是这样写的*/
     static class ViewHolder extends RecyclerView.ViewHolder{
         LinearLayout leftLayout;
         LinearLayout rightLayout;
